@@ -13,14 +13,14 @@ private:
 	unsigned bp;
 	unsigned  long sSize;
 	unsigned int tSlice;
-	unsigned* st1;
+	unsigned* stack;
 	unsigned state_new;
 	unsigned state_finished;
 	unsigned state_blocked;
 	unsigned state_ready;
 	unsigned state_running;
 	Thread* myThread;
-	int quantum;
+
 
 public:
 	PCB(unsigned long stackSize, unsigned int timeSlice, Thread *thread );
