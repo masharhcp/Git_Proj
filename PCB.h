@@ -5,7 +5,9 @@
 class Thread;
 
 class PCB{
-private:
+public:
+	enum States{CREATED,READY,BLOCKED,FINISHED};
+	States state;
 	static unsigned id;
 	unsigned ID;
 	unsigned sp;
@@ -14,16 +16,15 @@ private:
 	unsigned  long sSize;
 	unsigned int tSlice;
 	unsigned* stack;
-	unsigned state_new;
-	unsigned state_finished;
-	unsigned state_blocked;
-	unsigned state_ready;
-	unsigned state_running;
+	PCBList* WaitingOnMe;
+	PCB* BlockedOn;
+
 	Thread* myThread;
 
 
 public:
 	PCB(unsigned long stackSize, unsigned int timeSlice, Thread *thread );
+	~PCB();
 	void InitStack();
 	static void Wrapper();
 

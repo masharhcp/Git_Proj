@@ -7,19 +7,29 @@
 
 #ifndef _PCBLIST_H_
 #define _PCBLIST_H_
-
-class List{
+#include "PCB.h"
+class PCB;
+class PCBList{
 	struct Node{
+	public:
 		PCB* Data;
 		Node* Next;
-		Node(Data *d, Node *n =nullptr): Data(d), Next(n){}
+		Node(PCB *d): Data(d), Next(0){}
 		~Node() { delete Data; delete Next; }
 	};
 
+private:
+	Node *head, *tail;
+
 public:
-	List();
+	PCBList();
+	~PCBList();
 	void Add(PCB* data);
-	PCB* Get();
+	void Remove_First();
+	void Remove_By_ID(unsigned ID);
+	PCB* Get_First();
+	PCB* Get_By_ID(unsigned ID);
+	void Unblock_All();
 
 };
 
