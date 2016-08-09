@@ -2,7 +2,9 @@
 #define _PCB_H_
 
 #include "Thread.h"
+#include "PCBList.h"
 class Thread;
+class PCBList;
 
 class PCB{
 public:
@@ -18,7 +20,6 @@ public:
 	unsigned* stack;
 	PCBList* WaitingOnMe;
 	PCB* BlockedOn;
-
 	Thread* myThread;
 
 

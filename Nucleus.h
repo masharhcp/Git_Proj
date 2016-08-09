@@ -2,13 +2,9 @@
 #ifndef _NUCLEUS_H_
 #define _NUCLEUS_H_
 #include "PCBList.h"
-
-
-
-extern volatile int count;
-extern PCBList pcbs;
-extern PCB *running;
-extern int demand_context_change=0;
+#include "IdleT.h"
+#include "Thread.h"
+#include "PCB.h"
 
 
 
@@ -16,12 +12,26 @@ class Nucleus{
 
 
 public:
+
 	Nucleus();
 	~Nucleus();
-	void Inic();
-	void Restore();
+	static void Inic_Timer();
+	static void Restore_Timer();
+	static void Start_System();
+	static void Stop_System();
+
+	static void interrupt Timer();
+	static PCB *running;
+	static Thread *starting;
+	static IdleT* idle;
+	static int demand_context_change;
+	static PCBList pcbs;
+	static unsigned counter;
+
+	friend class Thread;
+	friend class PCB;
 
 };
-void interrupt Timer();
+
 
 #endif

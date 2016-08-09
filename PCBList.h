@@ -15,7 +15,7 @@ class PCBList{
 		PCB* Data;
 		Node* Next;
 		Node(PCB *d): Data(d), Next(0){}
-		~Node() { delete Data; delete Next; }
+		~Node(){}//dodaj destruktor
 	};
 
 private:

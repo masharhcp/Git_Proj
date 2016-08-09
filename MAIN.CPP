@@ -1,14 +1,12 @@
-#include "zagl1.h"
-#include "zagl2.h"
+#include "Nucleus.h"
 
-A::A(){
-    //
+
+int main(int argc, char* argv[]) {
+
+	Nucleus::Start_System();
+	//sta se desava ovde??
+	Nucleus::Stop_System();
+
 }
 
-B::B(){
-    //
-}
 
-/*int main(){
-    return 0;
-}*/

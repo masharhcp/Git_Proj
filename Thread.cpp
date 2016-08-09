@@ -5,6 +5,8 @@
 #include "iostream.h"
 #include "SCHEDULE.H"
 
+
+
 Thread::Thread(StackSize stackSize, Time timeSlice){
 	Lock();
 	myPCB=new PCB(stackSize, timeSlice, this);
@@ -15,15 +17,16 @@ Thread::~Thread(){}
 
 void Thread::start(){//proveri da li se vise puta pozvalo za istu nit
 	Lock();
+	myPCB->InitStack();
 	myPCB->state=PCB::READY;
-	pcbs.Add(myPCB);
+	Nucleus::pcbs.Add(myPCB);
 	Scheduler::put(myPCB);
 	Unlock();
 }
 
 
 ID Thread::getRunningId(){
-	return running->ID;
+	return Nucleus::running->ID;
 }
 
 ID Thread::getId(){
@@ -31,25 +34,25 @@ ID Thread::getId(){
 }
 
 Thread * Thread::getThreadById(ID id){
-	PCB *p=pcbs.Get_By_ID(id);
+	PCB *p=Nucleus::pcbs.Get_By_ID(id);
 	return p->myThread;
 }
 
 void Thread::waitToComplete(){//provera za starting i idle
 	Lock();
 	if(myPCB->state==PCB::FINISHED){Unlock(); return;}
-	if(myPCB==running){Unlock(); return;}
-	running->state=PCB::BLOCKED;
-	running->BlockedOn=myPCB;
-	myPCB->WaitingOnMe->Add(running);
+	if(myPCB==(Nucleus::running)){Unlock(); return;}
+	Nucleus::running->state=PCB::BLOCKED;
+	Nucleus::running->BlockedOn=myPCB;
+	myPCB->WaitingOnMe->Add(Nucleus::running);
 	dispatch();
 	Unlock();
 }
 
 void dispatch(){
 	Lock();
-	demand_context_change = 1;
-	Timer();
+	Nucleus::demand_context_change = 1;
+	Nucleus::Timer();
 	Unlock();
 }
 

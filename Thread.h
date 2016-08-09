@@ -21,6 +21,8 @@ public:
 	static Thread * getThreadById(ID id);
 protected:
 	friend class PCB;
+	friend class Nucleus;
+	friend class IdleThread;
 	Thread(StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice);
 	virtual void run() {}
 private:
