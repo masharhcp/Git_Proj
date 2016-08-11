@@ -22,7 +22,7 @@ public:
 protected:
 	friend class PCB;
 	friend class Nucleus;
-	friend class IdleThread;
+	friend class IdleT;
 	Thread(StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice);
 	virtual void run() {}
 private:

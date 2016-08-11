@@ -4,7 +4,7 @@
 #include "Lock.h"
 #include "iostream.h"
 #include "SCHEDULE.H"
-
+#include "IdleT.h"
 
 
 Thread::Thread(StackSize stackSize, Time timeSlice){
@@ -15,7 +15,7 @@ Thread::Thread(StackSize stackSize, Time timeSlice){
 
 Thread::~Thread(){}
 
-void Thread::start(){//proveri da li se vise puta pozvalo za istu nit
+void Thread::start(){
 	Lock();
 	myPCB->InitStack();
 	myPCB->state=PCB::READY;

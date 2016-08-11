@@ -6,7 +6,7 @@
 #include "Thread.h"
 #include "PCB.h"
 
-
+typedef void interrupt (*interruptRoutine)(...);
 
 class Nucleus{
 
@@ -19,8 +19,8 @@ public:
 	static void Restore_Timer();
 	static void Start_System();
 	static void Stop_System();
-
-	static void interrupt Timer();
+	static void interrupt Timer(...);
+	//static interruptRoutine oldRoutine;
 	static PCB *running;
 	static Thread *starting;
 	static IdleT* idle;

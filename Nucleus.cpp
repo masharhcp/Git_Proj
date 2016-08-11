@@ -3,7 +3,7 @@
 #include "schedule.h"
 #include <dos.h>
 #include <stdlib.h>
-
+#include <iostream.h>
 
 PCB* Nucleus::running = NULL;
 Thread* Nucleus::starting = NULL;
@@ -12,11 +12,16 @@ int Nucleus::demand_context_change = 0;
 PCBList Nucleus::pcbs;
 unsigned Nucleus::counter;
 
-void Nucleus::Inic_Timer(){
 
+void Nucleus::Inic_Timer(){
+	void interrupt (*oldRoutine)(...) = getvect(0x08);
+	setvect(0x08, Timer);
+	setvect(0x60, oldRoutine);
 
 }
 void Nucleus::Restore_Timer(){
+	void interrupt (*oldRoutine)(...) = getvect(0x60);
+	setvect(0x08, oldRoutine);
 
 }
 
@@ -24,12 +29,13 @@ void Nucleus::Restore_Timer(){
 void Nucleus::Start_System(){
 	Lock();
 	Inic_Timer();
-	starting=new Thread();
+	starting=new Thread(0x1000, 10);
 	starting->myPCB->state=PCB::READY;
 	running=starting->myPCB;
+	counter=running->tSlice;
 	idle=new IdleT();
 	idle->start();
-    Unlock();
+	Unlock();
 }
 
 void Nucleus::Stop_System(){
@@ -41,11 +47,12 @@ void Nucleus::Stop_System(){
 
 }
 
-void interrupt Nucleus::Timer(){
+void interrupt Nucleus::Timer(...){
 
  volatile unsigned tsp,tbp,tss;
-	if (!demand_context_change) --(Nucleus::counter);
-		if (Nucleus::counter == 0 || demand_context_change) {
+
+	if (!demand_context_change && running->tSlice!=0) {--(Nucleus::counter);  cout<<Nucleus::counter<<endl;}; //ako nije zahtevana promena konteksta i ako nit nema pravo da se izvrsava beskonacno
+		if ((Nucleus::counter == 0 && running->tSlice!=0) || demand_context_change) { //ako je zahtevana promena konteksta ili je nit dosla do nule (njen brojac)
 
 				demand_context_change=0;
 			asm {
@@ -60,9 +67,11 @@ void interrupt Nucleus::Timer(){
 			running->bp = tbp;
 
 
-	        if (!running->state==PCB::FINISHED)
-	        	Scheduler::put((PCB*)running);
+			if ((running->state==PCB::READY)&&(running!=idle->myPCB)) Scheduler::put((PCB*)running);
+
 	        running=Scheduler::get();
+	        if (running==0)running=idle->myPCB;
+
 			tsp = running->sp;
 			tss = running->ss;
 			tbp = running->bp;
