@@ -5,12 +5,13 @@
 #include <stdlib.h>
 #include <iostream.h>
 
-PCB* Nucleus::running = NULL;
+volatile PCB* Nucleus::running = NULL;
 Thread* Nucleus::starting = NULL;
 IdleT* Nucleus::idle = NULL;
 int Nucleus::demand_context_change = 0;
 PCBList Nucleus::pcbs;
 unsigned Nucleus::counter;
+volatile unsigned tsp,tbp,tss;
 
 
 void Nucleus::Inic_Timer(){
@@ -49,11 +50,14 @@ void Nucleus::Stop_System(){
 
 void interrupt Nucleus::Timer(...){
 
- volatile unsigned tsp,tbp,tss;
 
-	if (!demand_context_change && running->tSlice!=0) {--(Nucleus::counter);  cout<<Nucleus::counter<<endl;}; //ako nije zahtevana promena konteksta i ako nit nema pravo da se izvrsava beskonacno
-		if ((Nucleus::counter == 0 && running->tSlice!=0) || demand_context_change) { //ako je zahtevana promena konteksta ili je nit dosla do nule (njen brojac)
 
+	if (!demand_context_change && running->tSlice!=0) {
+		--(Nucleus::counter);}
+	//ako nije zahtevana promena konteksta i ako nit nema pravo da se izvrsava beskonacno
+		if ((Nucleus::counter == 0 && running->tSlice!=0) || demand_context_change){
+			//ako je zahtevana promena konteksta ili je nit dosla do nule (njen brojac)
+			 //cout<<"menjam kontekst"<<endl;
 				demand_context_change=0;
 			asm {
 				// cuva sp

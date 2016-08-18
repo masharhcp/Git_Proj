@@ -24,7 +24,7 @@ protected:
 	friend class Nucleus;
 	friend class IdleT;
 	Thread(StackSize stackSize = defaultStackSize, Time timeSlice = defaultTimeSlice);
-	virtual void run() {}
+	virtual void run(){}
 private:
 	PCB* myPCB;
 };

@@ -17,10 +17,10 @@ public:
 	unsigned bp;
 	unsigned  long sSize;
 	unsigned int tSlice;
-	unsigned* stack;
-	PCBList* WaitingOnMe;
-	PCB* BlockedOn;
-	Thread* myThread;
+	unsigned int *stack;
+	PCBList *WaitingOnMe;
+	PCB *BlockedOn;
+	Thread *myThread;
 
 
 public:

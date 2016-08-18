@@ -21,7 +21,7 @@ public:
 	static void Stop_System();
 	static void interrupt Timer(...);
 	//static interruptRoutine oldRoutine;
-	static PCB *running;
+	static volatile PCB *running;
 	static Thread *starting;
 	static IdleT* idle;
 	static int demand_context_change;

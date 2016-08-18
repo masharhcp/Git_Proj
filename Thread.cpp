@@ -13,13 +13,19 @@ Thread::Thread(StackSize stackSize, Time timeSlice){
 	Unlock();
 }
 
-Thread::~Thread(){}
+Thread::~Thread(){
+	//waitToComplete();//dodato
+	Lock();
+	waitToComplete();
+	delete myPCB;
+	Unlock();
+}
 
 void Thread::start(){
 	Lock();
 	myPCB->InitStack();
 	myPCB->state=PCB::READY;
-	Nucleus::pcbs.Add(myPCB);
+	//Nucleus::pcbs.Add(myPCB);
 	Scheduler::put(myPCB);
 	Unlock();
 }
@@ -44,7 +50,7 @@ void Thread::waitToComplete(){//provera za starting i idle
 	if(myPCB==(Nucleus::running)){Unlock(); return;}
 	Nucleus::running->state=PCB::BLOCKED;
 	Nucleus::running->BlockedOn=myPCB;
-	myPCB->WaitingOnMe->Add(Nucleus::running);
+	myPCB->WaitingOnMe->Add((PCB*)Nucleus::running);
 	dispatch();
 	Unlock();
 }

@@ -4,6 +4,7 @@
 #include "Nucleus.h"
 #include <iostream.h>
 #include <dos.h>
+#include "Lock.h"
 
 unsigned PCB::id=0;
 PCB::PCB(unsigned long stackSize, unsigned int timeSlice, Thread *thread){
@@ -12,6 +13,7 @@ PCB::PCB(unsigned long stackSize, unsigned int timeSlice, Thread *thread){
 	myThread=thread;
 	ID=++id;
 	state=CREATED;
+	Nucleus::pcbs.Add(this);
 
 }
 
@@ -37,9 +39,14 @@ void PCB::InitStack(){
 }
 
 void PCB::Wrapper(){
+	//cout<<"USO U VEPERRR"<<endl;
 	 Nucleus::running->myThread->run();
-	 Nucleus::running->WaitingOnMe->Unblock_All();
+	 //cout<<"IZASAO IZ RUNA"<<endl;
+	 Lock();
+	 Nucleus::running->WaitingOnMe->Unblock_All();//unblock all verovatno ne rai pa tu pukne, ali i dalje mislim da ne udje u run
 	 Nucleus::running->state=PCB::FINISHED;
+	 Unlock();
+	 //cout<<"zavrsavam wrapper"<<endl;
 	 dispatch();
 }
 

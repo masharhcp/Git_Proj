@@ -2,6 +2,7 @@
 #include "PCBList.h"
 #include "PCB.h"
 #include "SCHEDULE.H"
+#include "Lock.h"
 
 PCBList::PCBList(){
 	head=0;
@@ -78,7 +79,12 @@ void PCBList::Remove_By_ID(unsigned int ID){
 }
 
 PCB* PCBList::Get_First(){
-	return head->Data;
+	Node *temp=head;
+	if (temp==0) return 0;
+	Lock();
+	head = head->Next;
+	Unlock();
+		return temp->Data;
 }
 
 PCB* PCBList::Get_By_ID(unsigned int ID){
@@ -91,11 +97,12 @@ PCB* PCBList::Get_By_ID(unsigned int ID){
 }
 
 void PCBList::Unblock_All(){
-	Node* p;
-	p=head;
-	while(p){
-		p->Data->state=PCB::READY;
-		Scheduler::put(p->Data);
+	PCB* p;
+	p=head->Data;
+	while(p!=0){
+		p=Get_First();
+		p->state=PCB::READY;
+		Scheduler::put(p);
 	}
 
 
