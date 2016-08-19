@@ -30,24 +30,28 @@ protected:
 
 
  void BrzaNit::run() {
-	 SporijaNit *ss=new SporijaNit(4096, 17);
 	 Lock();
 	 cout<<"brza nit"<<endl;
+	 SporijaNit *ss=new SporijaNit(256, 20);
+	 ss->start();
 	 Unlock();
-	for (int i=0; i<30000; i++);
-	ss->start();
-	for (int j=0; j<30000; j++);
+	 for (int j=0; j<5000; j++);
+	 Lock();
 	delete ss;
+	Unlock();
+
 }
 
 
 
  void SporijaNit::run() {
- 	for (volatile long int i=0; i<70000; i++);
- 	Lock();
+
+	for (int j=0; j<500; j++);
+	Lock();
  	cout<<"sporija nit"<<endl;
  	Unlock();
-}
 
+}
+	//for (int j=0; j<30000; j++);
 
 #endif /* TEST_H_ */

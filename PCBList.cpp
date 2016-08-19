@@ -12,7 +12,7 @@ PCBList::PCBList(){
 PCBList::~PCBList(){
 	Node* it;
 	it=head;
-    while(head){
+    while(head!=0){
     	head=head->Next;
     	it->Next=0;
     	delete it;
@@ -102,6 +102,7 @@ void PCBList::Unblock_All(){
 	while(p!=0){
 		p=Get_First();
 		p->state=PCB::READY;
+		p->BlockedOn=0;
 		Scheduler::put(p);
 	}
 

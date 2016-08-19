@@ -14,11 +14,14 @@ PCB::PCB(unsigned long stackSize, unsigned int timeSlice, Thread *thread){
 	ID=++id;
 	state=CREATED;
 	Nucleus::pcbs.Add(this);
+	WaitingOnMe=new PCBList();
 
 }
 
 PCB::~PCB(){
-	myThread=0;
+	Lock();
+	delete WaitingOnMe;
+	Unlock();
 }
 
 void PCB::InitStack(){
@@ -46,7 +49,6 @@ void PCB::Wrapper(){
 	 Nucleus::running->WaitingOnMe->Unblock_All();//unblock all verovatno ne rai pa tu pukne, ali i dalje mislim da ne udje u run
 	 Nucleus::running->state=PCB::FINISHED;
 	 Unlock();
-	 //cout<<"zavrsavam wrapper"<<endl;
 	 dispatch();
 }
 
