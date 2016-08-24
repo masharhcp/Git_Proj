@@ -1,12 +1,44 @@
 #include "Nucleus.h"
 #include "Test.h"
 #include <iostream.h>
+#include "PriQueue.h"
+#include "PCBList.h"
+#include "PCB.h"
+class PriQueue;
+class PCB;
 class BrzaNit;
+class PCBList;
 //int argc, char* argv[]
 
 
 int main() {
-	cout<<"Poceo sam"<<endl;
+
+
+}
+
+
+//o[m-20]=new BrzaNit(256, m);
+//o[m-20]->start();
+//delete o[l-12];
+//p[m-20]=new SporijaNit(256, m);
+		//p[m-20]->start();
+//SporijaNit *p[12];
+/*for (volatile int k = 0; k<10000; ++k);
+	       			for (volatile int j = 0; j <30000; ++j);
+ SporijaNit *sn1=new SporijaNit(256, 40);
+    BrzaNit *bn1=new BrzaNit(256, 80);
+    bn1->start();
+    sn1->start();
+    delete bn1;
+    delete sn1;*/
+
+
+
+
+
+
+//MAIN
+/*	cout<<"Poceo sam"<<endl;
 Nucleus::Start_System();
 BrzaNit *p[500];
 
@@ -32,21 +64,53 @@ cout<<"Poceo sam"<<endl;
 
 Nucleus::Stop_System();
 
-return 1;
-}
+return 1;*/
 
 
-//o[m-20]=new BrzaNit(256, m);
-//o[m-20]->start();
-//delete o[l-12];
-//p[m-20]=new SporijaNit(256, m);
-		//p[m-20]->start();
-//SporijaNit *p[12];
-/*for (volatile int k = 0; k<10000; ++k);
-	       			for (volatile int j = 0; j <30000; ++j);
- SporijaNit *sn1=new SporijaNit(256, 40);
-    BrzaNit *bn1=new BrzaNit(256, 80);
-    bn1->start();
-    sn1->start();
-    delete bn1;
-    delete sn1;*/
+/*TEST ZA PRIQUEUE
+ PriQueue* lista=new PriQueue();
+PCB* pcb1=new PCB(256, 5, 0);
+PCB* pcb2=new PCB(256, 7, 0);
+PCB* pcb3=new PCB(256, 8, 0);
+PCB* pcb4=new PCB(256, 8, 0);
+lista->Add(pcb3, 20);
+lista->Add(pcb2, 19);
+lista->Add(pcb4, 23);
+lista->Add(pcb1, 22);
+lista->Print();
+
+lista->Remove_By_ID(3);
+cout<<"treca"<<endl;
+lista->Print();*/
+
+
+
+/*TEST ZA PCBList
+ PCBList* lista=new PCBList();
+PCB* pcb1=new PCB(256, 5, 0);
+PCB* pcb2=new PCB(256, 5, 0);
+PCB* pcb3=new PCB(256, 5, 0);
+PCB* pcb4=new PCB(256, 5, 0);
+PCB* pcb5=new PCB(256, 5, 0);
+
+lista->Add(pcb3);
+lista->Add(pcb5);
+cout<<"prvi print"<<endl;
+lista->Print();
+lista->Add(pcb2);
+lista->Remove_First();
+cout<<"drugi print"<<endl;
+lista->Print();
+lista->Add(pcb1);
+lista->Add(pcb4);
+cout<<"treci print"<<endl;
+lista->Print();
+lista->Remove_By_ID(4);
+cout<<"cetvrti print"<<endl;
+lista->Print();
+lista->Remove_By_ID(0);
+cout<<"peti print"<<endl;
+lista->Print();
+lista->Remove_By_ID(3);
+cout<<"sesti print"<<endl;
+lista->Print();*/

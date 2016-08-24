@@ -10,15 +10,14 @@
 #include "PCB.h"
 class PCB;
 class PCBList{
+
+private:
 	struct Node{
-	public:
 		PCB* Data;
 		Node* Next;
 		Node(PCB *d): Data(d), Next(0){}
-		~Node(){Data=0; Next=0;}//dodaj destruktor
 	};
 
-private:
 	Node *head, *tail;
 
 public:
@@ -30,6 +29,7 @@ public:
 	PCB* Get_First();
 	PCB* Get_By_ID(unsigned ID);
 	void Unblock_All();
+	void Print();
 
 };
 

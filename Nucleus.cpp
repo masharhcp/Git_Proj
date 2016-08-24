@@ -9,8 +9,11 @@ volatile PCB* Nucleus::running = NULL;
 Thread* Nucleus::starting = NULL;
 IdleT* Nucleus::idle = NULL;
 int Nucleus::demand_context_change = 0;
-PCBList Nucleus::pcbs;
+PCBList *Nucleus::pcbs;
+SemList *Nucleus::sems;
+PriQueue *Nucleus::pcbQue;
 unsigned Nucleus::counter;
+unsigned Nucleus::clock=0;
 volatile unsigned tsp,tbp,tss;
 
 
@@ -42,18 +45,31 @@ void Nucleus::Start_System(){
 void Nucleus::Stop_System(){
 	Lock();
 	Restore_Timer();
+	delete pcbQue;
+	delete pcbs;
+	delete sems;
 	delete starting;
 	delete idle;
 	Unlock();
 
 }
 
+
+PCB* curr=0;
 void interrupt Nucleus::Timer(...){
 
-
-
-	if (!demand_context_change && running->tSlice!=0) {
-		--(Nucleus::counter);}
+	if (!demand_context_change && running->tSlice!=0) {--(Nucleus::counter);}
+	if (!demand_context_change){Nucleus::clock++;}
+	while (Nucleus::pcbQue->Get_First() && Nucleus::pcbQue->Get_First()->MaxBlockTime<=Nucleus::clock){
+		PCB *curr=Nucleus::pcbQue->Remove_First();
+		curr->waitVal=0;
+		curr->MaxBlockTime=-1;
+		curr->state=PCB::READY;
+		curr->mySem->Get_BlockedPCBs()->Remove_By_ID(curr->ID);
+		curr->mySem->Inc_Sem_Value();
+		curr->mySem=0;
+		Scheduler::put(curr);
+	}
 	//ako nije zahtevana promena konteksta i ako nit nema pravo da se izvrsava beskonacno
 		if ((Nucleus::counter == 0 && running->tSlice!=0) || demand_context_change){
 			//ako je zahtevana promena konteksta ili je nit dosla do nule (njen brojac)

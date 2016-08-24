@@ -3,6 +3,7 @@
 #include "PCB.h"
 #include "SCHEDULE.H"
 #include "Lock.h"
+#include <iostream.h>
 
 PCBList::PCBList(){
 	head=0;
@@ -10,101 +11,116 @@ PCBList::PCBList(){
 }
 
 PCBList::~PCBList(){
-	Node* it;
-	it=head;
+	Node* curr;
+	curr=head;
     while(head!=0){
     	head=head->Next;
-    	it->Next=0;
-    	delete it;
-    	it=head;
+    	curr->Next=0;
+    	delete curr;
+    	curr=head;
     }
     head=0;
     tail=0;
 }
 
 void PCBList::Add(PCB* data){
+	Node *addNode=new Node(data);
 	if (head==0){
-		head=new Node(data);
+		head=addNode;
+		tail=head;
 	}
 	else{
-		tail->Next=new Node(data);
+		tail->Next=addNode;
+		tail=addNode;
 	}
-	tail=tail->Next;
+
 }
 
 void PCBList::Remove_First(){
-	Node* help;
-	help=head;
+	Node* curr;
+	curr=head;
+	if (head!=0){
 	if(head->Next!=0){
 	head=head->Next;}
 	else {
 		head=0;
 		tail=0;
 	}
-	delete help;
-
-}
-
-void PCBList::Remove_By_ID(unsigned int ID){
-	Node* it, *prev;
-	it=head;
-	prev=0;
-	while (it){
-		if (it->Data->ID==ID){
-			if (it==head){
-				if (head==tail){head=0; tail=0; delete it;}
-				else{
-				head=head->Next;
-				}
-			}
-			else {
-				if (it==tail){
-					tail=prev;
-					tail->Next=0;
-					delete it;
-				}
-
-				else{
-					prev->Next=it->Next;
-					it->Next=0;
-					delete it;
-				}
-			}
-		}
-		else{
-			prev=it;
-			it=it->Next;
-		}
+	delete curr;
 	}
 }
 
+void PCBList::Remove_By_ID(unsigned int ID){
+	Node *curr, *prev;
+	curr=head;
+	prev=0;
+	if (curr!=0){
+	while (curr && curr->Data->ID!=ID){
+		prev=curr;
+		curr=curr->Next;
+	}
+			if (curr==head){
+				if (head==tail){head=0; tail=0; delete curr;}
+				else{
+				head=head->Next;
+				curr->Next=0;
+				delete curr;
+				}
+			}
+			else {
+				if (curr==tail){
+					tail=prev;
+					tail->Next=0;
+					delete curr;
+				}
+
+				else{
+					prev->Next=curr->Next;
+					curr->Next=0;
+					delete curr;
+				}
+			}
+
+		}
+	}
+
+
+
 PCB* PCBList::Get_First(){
-	Node *temp=head;
-	if (temp==0) return 0;
+	Node *curr=head;
+	if (curr==0) return 0;
 	Lock();
 	head = head->Next;
 	Unlock();
-		return temp->Data;
+		return curr->Data;
 }
 
 PCB* PCBList::Get_By_ID(unsigned int ID){
-	Node* it;
-	it=head;
-	while (it){
-		if (it->Data->ID==ID)return it->Data;
+	Node* curr;
+	curr=head;
+	while (curr){
+		if (curr->Data->ID==ID)return curr->Data;
 	}
 	return 0;
 }
 
 void PCBList::Unblock_All(){
-	PCB* p;
-	p=head->Data;
-	while(p!=0){
-		p=Get_First();
-		p->state=PCB::READY;
-		p->BlockedOn=0;
-		Scheduler::put(p);
+	PCB* curr;
+	curr=head->Data;
+	while(curr!=0){
+		curr=Get_First();
+		curr->state=PCB::READY;
+		curr->BlockedOn=0;
+		Scheduler::put(curr);
 	}
 
 
-};
+}
+
+void PCBList::Print(){
+	Node* curr=head;
+	while (curr){
+		cout<<curr->Data->ID<<endl;
+		curr=curr->Next;
+	}
+}

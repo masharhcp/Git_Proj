@@ -40,7 +40,7 @@ ID Thread::getId(){
 }
 
 Thread * Thread::getThreadById(ID id){
-	PCB *p=Nucleus::pcbs.Get_By_ID(id);
+	PCB *p=Nucleus::pcbs->Get_By_ID(id);
 	return p->myThread;
 }
 

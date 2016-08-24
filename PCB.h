@@ -3,8 +3,12 @@
 
 #include "Thread.h"
 #include "PCBList.h"
+#include "Semaphor.h"
+#include "KernSem.h"
 class Thread;
 class PCBList;
+class Semaphore;
+class KernelSem;
 
 class PCB{
 public:
@@ -18,9 +22,12 @@ public:
 	unsigned  long sSize;
 	unsigned int tSlice;
 	unsigned int *stack;
+	int MaxBlockTime;
+	int waitVal;
 	PCBList *WaitingOnMe;
 	PCB *BlockedOn;
 	Thread *myThread;
+	KernelSem *mySem;
 
 
 public:

@@ -10,6 +10,8 @@ public:
 	virtual int wait(Time maxTimeToWait);
 	virtual void signal();
 	int val() const; // Returns the current value of the semaphore
+protected:
+	friend class Nucleus;
 private:
 	KernelSem* myImpl;
 };

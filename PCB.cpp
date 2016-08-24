@@ -11,9 +11,11 @@ PCB::PCB(unsigned long stackSize, unsigned int timeSlice, Thread *thread){
 	sSize=stackSize/2;
 	tSlice=timeSlice;
 	myThread=thread;
-	ID=++id;
+	ID=id++;
 	state=CREATED;
-	Nucleus::pcbs.Add(this);
+	MaxBlockTime=-1;
+	waitVal=1;
+	Nucleus::pcbs->Add(this);
 	WaitingOnMe=new PCBList();
 
 }
@@ -42,9 +44,7 @@ void PCB::InitStack(){
 }
 
 void PCB::Wrapper(){
-	//cout<<"USO U VEPERRR"<<endl;
 	 Nucleus::running->myThread->run();
-	 //cout<<"IZASAO IZ RUNA"<<endl;
 	 Lock();
 	 Nucleus::running->WaitingOnMe->Unblock_All();//unblock all verovatno ne rai pa tu pukne, ali i dalje mislim da ne udje u run
 	 Nucleus::running->state=PCB::FINISHED;

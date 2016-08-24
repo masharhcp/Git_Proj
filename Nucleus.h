@@ -5,6 +5,9 @@
 #include "IdleT.h"
 #include "Thread.h"
 #include "PCB.h"
+#include "KernSem.h"
+#include "SemList.h"
+#include "PriQueue.h"
 
 typedef void interrupt (*interruptRoutine)(...);
 
@@ -23,14 +26,17 @@ public:
 	//static interruptRoutine oldRoutine;
 	static volatile PCB *running;
 	static Thread *starting;
-	static IdleT* idle;
+	static IdleT *idle;
 	static int demand_context_change;
-	static PCBList pcbs;
+	static PCBList *pcbs;
+	static SemList *sems;
+	static PriQueue *pcbQue;
 	static unsigned counter;
+	static unsigned clock;
 
 	friend class Thread;
 	friend class PCB;
-
+	friend class KernelSem;
 };
 
 
