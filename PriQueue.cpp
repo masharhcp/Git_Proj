@@ -117,6 +117,7 @@ PriQueue::~PriQueue(){
     while(head!=0){
     	head=head->Next;
     	curr->Next=0;
+    	curr->Data=0;
     	delete curr;
     	curr=head;
     }

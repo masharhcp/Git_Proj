@@ -52,6 +52,37 @@ protected:
  	Unlock();
 
 }
-	//for (int j=0; j<30000; j++);
+ Semaphore* mutex = 0;
+
+
+ class Znak : public Thread
+ {
+ public:
+ 	Znak(char znak, int n) : Thread(), znak(znak), n(n) {}
+ 	virtual ~Znak() { waitToComplete(); }
+
+ void run()
+ 	{
+
+ 		for (long i = 0; i<100000; i++)
+ 		{
+ 				mutex->wait(1);
+ 				cout << znak <<" "<<i<<endl;
+ 				mutex->signal();
+
+ 		}
+
+ 		   mutex->wait(1);
+ 			cout << endl << znak << " finished" << endl;
+ 			mutex->signal();
+
+
+ 	}
+
+ private:
+ 	char znak;
+ 	int n;
+
+ };
 
 #endif /* TEST_H_ */

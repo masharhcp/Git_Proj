@@ -46,8 +46,8 @@ void PCB::InitStack(){
 void PCB::Wrapper(){
 	 Nucleus::running->myThread->run();
 	 Lock();
-	 Nucleus::running->WaitingOnMe->Unblock_All();//unblock all verovatno ne rai pa tu pukne, ali i dalje mislim da ne udje u run
 	 Nucleus::running->state=PCB::FINISHED;
+	 Nucleus::running->WaitingOnMe->Unblock_All();
 	 Unlock();
 	 dispatch();
 }

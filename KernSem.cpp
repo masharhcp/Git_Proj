@@ -11,20 +11,23 @@
 KernelSem::KernelSem(int val){
 	value=val;
 	BlockedPCBs=new PCBList();
+	Nucleus::sems->Add(this);
 }
 
 int KernelSem::wait(Time maxTimeToWait){//povratna vrednost; vidi kad koja i vrati;
 	int retValue;
 	value--;
-	if (value<0) block(maxTimeToWait);
+	if (value<0)
+		block(maxTimeToWait);
+
 	retValue=Nucleus::running->waitVal;
-	//Nucleus::running->waitVal=1;???????????????????
+	Nucleus::running->waitVal=1;
 	return retValue;
 }
 
 void KernelSem::signal(){
-	value++;
-	if(value<=0)unblock();
+
+	if(value++<0)unblock();
 
 	}
 
@@ -57,6 +60,7 @@ void KernelSem::unblock(){
 	}
 
 KernelSem::~KernelSem(){//deblokiraj ih sve pre nego sto obrises semafor
+
 		delete BlockedPCBs;
 	}
 

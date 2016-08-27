@@ -1,6 +1,6 @@
 #ifndef _THREAD_H_
 #define _THREAD_H_
-
+#include <iostream.h>
 
 typedef unsigned long StackSize;
 const StackSize defaultStackSize = 4096;

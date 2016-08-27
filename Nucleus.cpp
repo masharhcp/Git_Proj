@@ -33,6 +33,7 @@ void Nucleus::Restore_Timer(){
 void Nucleus::Start_System(){
 	Lock();
 	Inic_Timer();
+
 	starting=new Thread(0x1000, 10);
 	starting->myPCB->state=PCB::READY;
 	running=starting->myPCB;
@@ -45,9 +46,6 @@ void Nucleus::Start_System(){
 void Nucleus::Stop_System(){
 	Lock();
 	Restore_Timer();
-	delete pcbQue;
-	delete pcbs;
-	delete sems;
 	delete starting;
 	delete idle;
 	Unlock();
@@ -59,9 +57,9 @@ PCB* curr=0;
 void interrupt Nucleus::Timer(...){
 
 	if (!demand_context_change && running->tSlice!=0) {--(Nucleus::counter);}
-	if (!demand_context_change){Nucleus::clock++;}
-	while (Nucleus::pcbQue->Get_First() && Nucleus::pcbQue->Get_First()->MaxBlockTime<=Nucleus::clock){
-		PCB *curr=Nucleus::pcbQue->Remove_First();
+	if (!demand_context_change){Nucleus::clock++;
+	while (Nucleus::pcbQue && Nucleus::pcbQue->Get_First() && Nucleus::pcbQue->Get_First()->MaxBlockTime<=Nucleus::clock){
+		curr=Nucleus::pcbQue->Remove_First();
 		curr->waitVal=0;
 		curr->MaxBlockTime=-1;
 		curr->state=PCB::READY;
@@ -70,10 +68,11 @@ void interrupt Nucleus::Timer(...){
 		curr->mySem=0;
 		Scheduler::put(curr);
 	}
+	}
 	//ako nije zahtevana promena konteksta i ako nit nema pravo da se izvrsava beskonacno
 		if ((Nucleus::counter == 0 && running->tSlice!=0) || demand_context_change){
 			//ako je zahtevana promena konteksta ili je nit dosla do nule (njen brojac)
-			 //cout<<"menjam kontekst"<<endl;
+			// cout<<"menjam kontekst"<<endl;
 				demand_context_change=0;
 			asm {
 				// cuva sp

@@ -3,6 +3,7 @@
 #include "PCB.h"
 #include "Thread.h"
 #include "Lock.h"
+#include <iostream.h>
 
 class Thread;
 class PCB;
@@ -10,7 +11,7 @@ IdleT::IdleT():Thread(256 ,0){}
 
 void IdleT::run(){
 	k=1;
-	while (k==1){}
+	while (k==1){cout<<"idle"<<endl;}
 }
 
 void IdleT::start(){

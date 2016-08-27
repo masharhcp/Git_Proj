@@ -12,6 +12,39 @@ class PCBList;
 
 
 int main() {
+Nucleus::Start_System();
+
+mutex = new Semaphore(1);
+
+		Znak* a = new Znak('a', 10);
+		Znak* b = new Znak('b', 15);
+		Znak* c = new Znak('c', 20);
+
+
+
+		a->start();
+		b->start();
+		c->start();
+
+
+
+		delete a;
+		delete b;
+		delete c;
+
+
+
+		mutex->wait(1);
+			Lock();
+			cout << endl << "userMain finished" << endl;
+			Unlock();
+			mutex->signal();
+
+
+		delete mutex;
+		Nucleus::Stop_System();
+
+		return 0;
 
 
 }

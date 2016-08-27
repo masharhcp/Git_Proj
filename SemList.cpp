@@ -20,6 +20,7 @@ SemList::~SemList(){
     while(head!=0){
     	head=head->Next;
     	curr->Next=0;
+    	curr->Data=0;
     	delete curr;
     	curr=head;
     }
@@ -54,9 +55,7 @@ void SemList::Remove_First(){
 KernelSem* SemList::Get_First(){
 	Node *curr=head;
 	if (curr==0) return 0;
-	Lock();
-	head = head->Next;
-	Unlock();
+
 		return curr->Data;
 }
 

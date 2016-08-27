@@ -16,6 +16,7 @@ PCBList::~PCBList(){
     while(head!=0){
     	head=head->Next;
     	curr->Next=0;
+    	curr->Data=0;
     	delete curr;
     	curr=head;
     }
@@ -41,11 +42,13 @@ void PCBList::Remove_First(){
 	curr=head;
 	if (head!=0){
 	if(head->Next!=0){
-	head=head->Next;}
+	head=head->Next;
+	}
 	else {
 		head=0;
 		tail=0;
 	}
+	curr->Data=0;
 	delete curr;
 	}
 }
@@ -82,6 +85,7 @@ void PCBList::Remove_By_ID(unsigned int ID){
 			}
 
 		}
+
 	}
 
 
@@ -89,10 +93,7 @@ void PCBList::Remove_By_ID(unsigned int ID){
 PCB* PCBList::Get_First(){
 	Node *curr=head;
 	if (curr==0) return 0;
-	Lock();
-	head = head->Next;
-	Unlock();
-		return curr->Data;
+	return curr->Data;
 }
 
 PCB* PCBList::Get_By_ID(unsigned int ID){
@@ -105,14 +106,16 @@ PCB* PCBList::Get_By_ID(unsigned int ID){
 }
 
 void PCBList::Unblock_All(){
-	PCB* curr;
-	curr=head->Data;
-	while(curr!=0){
-		curr=Get_First();
-		curr->state=PCB::READY;
-		curr->BlockedOn=0;
-		Scheduler::put(curr);
-	}
+	Node* curr;
+		curr=head;
+		while(head){
+			curr->Data->state=PCB::READY;
+			curr->Data->BlockedOn=0;
+			Scheduler::put(curr->Data);
+			head=head->Next;
+			curr->Data=0;
+			delete curr;
+		}
 
 
 }

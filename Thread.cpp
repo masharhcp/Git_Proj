@@ -48,6 +48,8 @@ void Thread::waitToComplete(){//provera za starting i idle
 	Lock();
 	if(myPCB->state==PCB::FINISHED){Unlock(); return;}
 	if(myPCB==(Nucleus::running)){Unlock(); return;}
+	if(this==(Nucleus::starting)){Unlock(); return;}
+	if(this==(Nucleus::idle)){Unlock(); return;}
 	Nucleus::running->state=PCB::BLOCKED;
 	Nucleus::running->BlockedOn=myPCB;
 	myPCB->WaitingOnMe->Add((PCB*)Nucleus::running);
