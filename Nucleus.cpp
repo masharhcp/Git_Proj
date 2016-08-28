@@ -15,18 +15,21 @@ PriQueue *Nucleus::pcbQue;
 unsigned Nucleus::counter;
 unsigned Nucleus::clock=0;
 volatile unsigned tsp,tbp,tss;
+IVTEntry* Nucleus::IVTTable[256];
 
 
 void Nucleus::Inic_Timer(){
+#ifndef BCC_BLOCK_IGNORE
 	void interrupt (*oldRoutine)(...) = getvect(0x08);
 	setvect(0x08, Timer);
 	setvect(0x60, oldRoutine);
-
+#endif
 }
 void Nucleus::Restore_Timer(){
+#ifndef BCC_BLOCK_IGNORE
 	void interrupt (*oldRoutine)(...) = getvect(0x60);
 	setvect(0x08, oldRoutine);
-
+#endif
 }
 
 

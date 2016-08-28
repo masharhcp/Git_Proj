@@ -7,8 +7,26 @@
 
 #ifndef IVTENTRY_H_
 #define IVTENTRY_H_
+#include "KernelEv.h"
+
+typedef void interrupt(*pInterrupt)(...);
+typedef unsigned char IVTNo;
 
 
+class IVTEntry{
+
+public:
+	KernelEv *myKernelEv;
+	IVTEntry(IVTNo no, pInterrupt newRoutine);
+	~IVTEntry();
+	void callOld();
+	void signal();
+
+private:
+
+pInterrupt oldR;
+int ivtNo;
+};
 
 
 

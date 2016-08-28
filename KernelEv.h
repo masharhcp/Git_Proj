@@ -8,6 +8,21 @@
 #ifndef KERNELEV_H_
 #define KERNELEV_H_
 
+#include "PCB.h"
+typedef unsigned char IVTNo;
+
+class KernelEv{
+public:
+	KernelEv(IVTNo ivtN);
+	~KernelEv();
+    void signal();
+    void wait();
+
+private:
+    int value;
+	IVTNo ivtNo;
+	PCB* maker;
+};
 
 
 

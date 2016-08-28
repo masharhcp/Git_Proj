@@ -8,6 +8,7 @@
 #include "KernSem.h"
 #include "SemList.h"
 #include "PriQueue.h"
+#include "IVTEntry.h"
 
 typedef void interrupt (*interruptRoutine)(...);
 
@@ -33,10 +34,13 @@ public:
 	static PriQueue *pcbQue;
 	static unsigned counter;
 	static unsigned clock;
+	static IVTEntry* IVTTable[256];
+
 
 	friend class Thread;
 	friend class PCB;
 	friend class KernelSem;
+	friend class IVTEntry;
 };
 
 
