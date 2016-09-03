@@ -36,11 +36,11 @@ int KernelSem::val(){
 }
 
 void KernelSem::block(Time time){
+	Lock();
 	Nucleus::running->state=PCB::BLOCKED;
 	Nucleus::running->mySem=this;
-	if (time!=0)Nucleus::pcbQue->Add((PCB*)Nucleus::running, time);
+	if (time>0)Nucleus::pcbQueue->Add((PCB*)Nucleus::running, time);
 	BlockedPCBs->Add((PCB*)Nucleus::running);
-	Lock();
 	dispatch();
 	Unlock();
 	}
@@ -48,7 +48,7 @@ void KernelSem::block(Time time){
 void KernelSem::unblock(){
 	PCB* hel=BlockedPCBs->Get_First();
 	if (hel->MaxBlockTime>0){
-		Nucleus::pcbQue->Remove_By_ID(hel->ID);
+		Nucleus::pcbQueue->Remove_By_ID(hel->ID);
 		hel->MaxBlockTime=-1;
 	}
 	hel->waitVal=1;

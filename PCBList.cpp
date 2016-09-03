@@ -5,24 +5,9 @@
 #include "Lock.h"
 #include <iostream.h>
 
-PCBList::PCBList(){
-	head=0;
-	tail=0;
-}
+//PCBList::PCBList(){}
 
-PCBList::~PCBList(){
-	Node* curr;
-	curr=head;
-    while(head!=0){
-    	head=head->Next;
-    	curr->Next=0;
-    	curr->Data=0;
-    	delete curr;
-    	curr=head;
-    }
-    head=0;
-    tail=0;
-}
+
 
 void PCBList::Add(PCB* data){
 	Node *addNode=new Node(data);
@@ -106,24 +91,43 @@ PCB* PCBList::Get_By_ID(unsigned int ID){
 }
 
 void PCBList::Unblock_All(){
-	Node* curr;
+
+		Node* curr;
 		curr=head;
-		while(head){
-			curr->Data->state=PCB::READY;
-			curr->Data->BlockedOn=0;
-			Scheduler::put(curr->Data);
-			head=head->Next;
-			curr->Data=0;
-			delete curr;
-		}
+	    while(head!=0){
+	    	head=head->Next;
+	    	curr->Data->state=PCB::READY;
+	    	curr->Data->BlockedOn=0;
+	    	Scheduler::put(curr->Data);
+	    	curr->Next=0;
+	    	curr->Data=0;
+	    	delete curr;
+	    	curr=head;
+	    }
+	    head=0;
+	    tail=0;
 
 
+}
+
+PCBList::~PCBList(){
+	Node* curr;
+	curr=head;
+    while(head!=0){
+    	head=head->Next;
+    	curr->Next=0;
+    	curr->Data=0;
+    	delete curr;
+    	curr=head;
+    }
+    head=0;
+    tail=0;
 }
 
 void PCBList::Print(){
 	Node* curr=head;
 	while (curr){
-		cout<<curr->Data->ID<<endl;
+		cout<<"ID: "<<curr->Data->ID<<endl;
 		curr=curr->Next;
 	}
 }

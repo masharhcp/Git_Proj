@@ -10,15 +10,10 @@
 #include "Nucleus.h"
 #include <iostream.h>
 
-PriQueue::PriQueue(){
-	tail=0;
-	head=0;
-}
-
 void PriQueue::Add(PCB* p, int time){
 	p->MaxBlockTime=time;
-	Node *addNode=new Node(p, time);
-	addNode->TimeToWait=time+(Nucleus::clock);
+	int k=time+Nucleus::clock;
+	Node *addNode=new Node(p, k);
 	Node *curr, *prev;
 	curr=head;
 	prev=0;
@@ -27,7 +22,7 @@ void PriQueue::Add(PCB* p, int time){
 		head=tail=addNode;
 	}
 	else{
-		while (curr && curr->TimeToWait<=addNode->TimeToWait){
+		while (curr && curr->TimeToWait<addNode->TimeToWait){
 			prev=curr;
 			curr=curr->Next;
 		}
@@ -49,8 +44,13 @@ void PriQueue::Add(PCB* p, int time){
 
 }
 
+int PriQueue::Get_First_TTW(){
+	return head->TimeToWait;
+
+}
+
 PCB* PriQueue::Get_First(){
-	return head->Data;
+ return head->Data;
 
 }
 
@@ -127,9 +127,11 @@ PriQueue::~PriQueue(){
 
 void PriQueue::Print(){
 	Node* curr=head;
-	while (curr){
-		cout<<curr->TimeToWait<<endl;
+	if (head!=0){
+	while (curr->Data){
+		cout<<curr->TimeToWait<<" ID:"<<curr->Data->ID<<endl;
 		curr=curr->Next;
+	}
 	}
 
 }

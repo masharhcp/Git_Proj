@@ -15,6 +15,7 @@ public:
 	enum States{CREATED,READY,BLOCKED,FINISHED};
 	States state;
 	static unsigned id;
+	static PCBList* pcbs;
 	unsigned ID;
 	unsigned sp;
 	unsigned ss;

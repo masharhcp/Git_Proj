@@ -11,6 +11,10 @@
 #include "IVTEntry.h"
 
 typedef void interrupt (*interruptRoutine)(...);
+class PriQueue;
+class PCBList;
+
+
 
 class Nucleus{
 
@@ -24,18 +28,18 @@ public:
 	static void Start_System();
 	static void Stop_System();
 	static void interrupt Timer(...);
-	//static interruptRoutine oldRoutine;
 	static volatile PCB *running;
+	static PCB *startingPCB;
 	static Thread *starting;
 	static IdleT *idle;
 	static int demand_context_change;
-	static PCBList *pcbs;
-	static SemList *sems;
-	static PriQueue *pcbQue;
+	static PCBList* pcbList;
+	static SemList* sems;
+	static PriQueue* pcbQueue;
 	static unsigned counter;
-	static unsigned clock;
+	static volatile unsigned long clock;
 	static IVTEntry* IVTTable[256];
-
+	static int test;
 
 	friend class Thread;
 	friend class PCB;

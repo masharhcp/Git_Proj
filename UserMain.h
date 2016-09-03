@@ -10,17 +10,19 @@
 
 #include "Thread.h"
 
+int userMain(int,char**);
 class UserMain :public Thread{
 
 private:
 	char** argv;
 	int argc;
-	void run();
+	virtual void run();
 
 public:
+	int ret;
 	UserMain(int, char**);
+	~UserMain();
 };
-
 
 
 

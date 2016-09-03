@@ -1,5 +1,5 @@
 /*
- * Test.h
+ /** Test.h
  *
  *  Created on: Aug 11, 2016
  *      Author: OS1
@@ -85,4 +85,4 @@ protected:
 
  };
 
-#endif /* TEST_H_ */
+#endif TEST_H_

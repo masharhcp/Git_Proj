@@ -14,9 +14,8 @@ Thread::Thread(StackSize stackSize, Time timeSlice){
 }
 
 Thread::~Thread(){
-	//waitToComplete();//dodato
 	Lock();
-	waitToComplete();
+	//waitToComplete();
 	delete myPCB;
 	Unlock();
 }
@@ -40,7 +39,7 @@ ID Thread::getId(){
 }
 
 Thread * Thread::getThreadById(ID id){
-	PCB *p=Nucleus::pcbs->Get_By_ID(id);
+	PCB *p=Nucleus::pcbList->Get_By_ID(id);
 	return p->myThread;
 }
 
@@ -64,4 +63,4 @@ void dispatch(){
 	Unlock();
 }
 
-
+//void tick(){}

@@ -19,7 +19,7 @@ public:
 	KernelEv *myKernelEv;
 	IVTEntry(IVTNo no, pInterrupt newRoutine);
 	~IVTEntry();
-	void callOld();
+	void callOldR();
 	void signal();
 
 private:

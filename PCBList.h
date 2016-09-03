@@ -11,7 +11,7 @@
 class PCB;
 class PCBList{
 
-private:
+public:
 	struct Node{
 		PCB* Data;
 		Node* Next;
@@ -21,7 +21,7 @@ private:
 	Node *head, *tail;
 
 public:
-	PCBList();
+	PCBList():head(0),tail(0){}
 	~PCBList();
 	void Add(PCB* data);
 	void Remove_First();

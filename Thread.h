@@ -30,5 +30,6 @@ private:
 };
 
 void dispatch();
+void tick();
 
 #endif

@@ -7,11 +7,11 @@
 
 class Thread;
 class PCB;
-IdleT::IdleT():Thread(256 ,0){}
+IdleT::IdleT():Thread(256 , 2){}
 
 void IdleT::run(){
 	k=1;
-	while (k==1){cout<<"idle"<<endl;}
+	while (k==1){}
 }
 
 void IdleT::start(){

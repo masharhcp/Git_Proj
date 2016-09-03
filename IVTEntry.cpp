@@ -7,6 +7,7 @@
 
 #include "IVTEntry.h"
 #include "Nucleus.h"
+#include "Lock.h"
 #include <dos.h>
 
 IVTEntry::IVTEntry(IVTNo no, pInterrupt newRoutine){
@@ -19,19 +20,24 @@ setvect(no, newRoutine);
 }
 
 IVTEntry::~IVTEntry(){
+	Lock();
 #ifndef BCC_BLOCK_IGNORE
 	setvect(ivtNo, oldR);
 #endif
+	Unlock();
 
 }
 
-void IVTEntry::callOld(){
+void IVTEntry::callOldR(){
+	Lock();
 	(*oldR)();
-
+	Unlock();
 }
 
 void IVTEntry::signal(){
+	Lock();
 	myKernelEv->signal();
+	Unlock();
 
 }
 
