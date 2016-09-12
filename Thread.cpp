@@ -24,7 +24,6 @@ void Thread::start(){
 	Lock();
 	myPCB->InitStack();
 	myPCB->state=PCB::READY;
-	//Nucleus::pcbs.Add(myPCB);
 	Scheduler::put(myPCB);
 	Unlock();
 }

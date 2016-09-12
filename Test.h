@@ -10,6 +10,8 @@
 #include "Thread.h"
 #include "Lock.h"
 #include <iostream.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 class BrzaNit: public Thread{
 public:
@@ -52,31 +54,59 @@ protected:
  	Unlock();
 
 }
+
+
+ //PREPAREENTRY(9,1);
+
+
  Semaphore* mutex = 0;
+ Semaphore* waitSem = 0;
 
 
- class Znak : public Thread
- {
+ class Znak;
+
+ Znak* a = 0;
+ Znak* b = 0;
+ Znak* c = 0;
+
+ class Znak : public Thread {
  public:
  	Znak(char znak, int n) : Thread(), znak(znak), n(n) {}
  	virtual ~Znak() { waitToComplete(); }
 
- void run()
- 	{
+ 	void run() {
+ 		// for (long i = 0; i < 100000; i++) {
+ 		for (int i = 0; i < n; i++) {
 
- 		for (long i = 0; i<100000; i++)
- 		{
- 				mutex->wait(1);
- 				cout << znak <<" "<<i<<endl;
+ 			if (mutex->wait(1)) {
+ 				cout << znak;
  				mutex->signal();
 
+ 			}
+
+ 			// mutex->wait(0);
+ 			// cout << znak;
+ 			// mutex->signal();
+
+ 			// for (int j = 0; j < 10000; j++)
+ 				// for (int k = 0; k < 10000; k++);
+ 			waitSem->wait(3);
+
+ 			// dispatch();
  		}
 
- 		   mutex->wait(1);
+ 		if (mutex->wait(1)) {
  			cout << endl << znak << " finished" << endl;
  			mutex->signal();
+ 		}
 
+ 		// mutex->wait(0);
+ 		// cout << endl << znak << " finished" << endl;
+ 		// mutex->signal();
 
+ 		// if (znak == 'a') b->waitToComplete();
+ 		// if (znak == 'b') c->waitToComplete();
+ 		// if (znak == 'c') a->waitToComplete();
  	}
 
  private:
@@ -84,5 +114,36 @@ protected:
  	int n;
 
  };
+
+
+ /*class Key : public Thread {
+ public:
+ 	Key(int n) : Thread(), n(n) {}
+ 	virtual ~Key() { waitToComplete(); }
+
+ 	void run() {
+ 		Event e(9);
+
+ 		for (int i = 0; i < n; i++) {
+ 			mutex->wait(0);
+ 			cout << endl << "key waiting " << (i + 1) << endl;
+ 			mutex->signal();
+
+ 			e.wait();
+
+ 			mutex->wait(0);
+ 			cout << endl << "key continue " << (i + 1) << endl;
+ 			mutex->signal();
+ 		}
+
+ 		mutex->wait(0);
+ 		cout << endl << "key finished" << endl;
+ 		mutex->signal();
+ 	}
+
+ private:
+ 	int n;
+
+ };*/
 
 #endif TEST_H_

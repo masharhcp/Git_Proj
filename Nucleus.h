@@ -9,10 +9,12 @@
 #include "SemList.h"
 #include "PriQueue.h"
 #include "IVTEntry.h"
+#include "UserMain.h"
 
 typedef void interrupt (*interruptRoutine)(...);
 class PriQueue;
 class PCBList;
+class UserMain;
 
 
 
@@ -32,14 +34,15 @@ public:
 	static PCB *startingPCB;
 	static Thread *starting;
 	static IdleT *idle;
-	static int demand_context_change;
+	static volatile int demand_context_change;
 	static PCBList* pcbList;
 	static SemList* sems;
 	static PriQueue* pcbQueue;
-	static unsigned counter;
+	static volatile unsigned counter;
 	static volatile unsigned long clock;
 	static IVTEntry* IVTTable[256];
 	static int test;
+	static UserMain *umain;
 
 	friend class Thread;
 	friend class PCB;

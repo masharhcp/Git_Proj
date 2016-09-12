@@ -1,32 +1,40 @@
 #include "Nucleus.h"
-#include "Test.h"
 #include <iostream.h>
 #include "PriQueue.h"
 #include "PCBList.h"
 #include "PCB.h"
 #include "UserMain.h"
 #include "Lock.h"
+#include "Nucleus.h"
 class PriQueue;
 class PCB;
 class BrzaNit;
 class PCBList;
+class UserMain;
 
 
 
 int main(int argc, char* argv[]) {
+	Nucleus::Start_System();
+	Nucleus::umain=new UserMain(argc,argv);
+	Nucleus::umain->start();
+	Nucleus::umain->waitToComplete();
+	int ret=Nucleus::umain->ret;
+	delete Nucleus::umain;
+	Nucleus::Stop_System();
+	return ret;
 
-Nucleus::Start_System();
-UserMain *u=new UserMain(argc,argv);
-u->start();
-BrzaNit *i= new BrzaNit();
-u->waitToComplete();
-int ret=u->ret;
-delete u;
-Nucleus::Stop_System();
-return ret;
 
 }
-
+//MAIN PRAVI
+/*Nucleus::Start_System();
+Nucleus::umain=new UserMain(argc,argv);
+Nucleus::umain->start();
+Nucleus::umain->waitToComplete();
+int ret=Nucleus::umain->ret;
+delete Nucleus::umain;
+Nucleus::Stop_System();
+return ret;*/
 
 //o[m-20]=new BrzaNit(256, m);
 //o[m-20]->start();

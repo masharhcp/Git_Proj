@@ -12,15 +12,15 @@ volatile PCB* Nucleus::running = 0;
 PCB* Nucleus::startingPCB = 0;
 Thread* Nucleus::starting = 0;
 IdleT* Nucleus::idle = 0;
-int Nucleus::demand_context_change = 0;
-unsigned Nucleus::counter;
+volatile int Nucleus::demand_context_change = 0;
+volatile unsigned Nucleus::counter=0;
 volatile unsigned long Nucleus::clock;
 int Nucleus::test=0;
 volatile unsigned tsp,tbp,tss;
 IVTEntry* Nucleus::IVTTable[256];
+UserMain* Nucleus::umain=0;
 
-/*extern PriQueue* pcbQueue=0;
-extern PCBList* pcbList=0;*/
+
 
 
 void Nucleus::Inic_Timer(){
@@ -75,9 +75,9 @@ void interrupt Nucleus::Timer(...){
 	if (!demand_context_change && counter>0) {--counter; }
 	if (!demand_context_change){
 		++clock;
-
+		//cout<<endl<<"Clock: "<<Nucleus::clock<<endl;
 	while ((pcbQueue->head!=0) && (pcbQueue->Get_First()!=0) && (pcbQueue->Get_First_TTW()<=clock)){
-
+		//pcbQueue->Print();
 		curr=pcbQueue->Remove_First();
 		if (curr!=0){
 		curr->state=PCB::READY;
@@ -92,7 +92,7 @@ void interrupt Nucleus::Timer(...){
 }
 
 	//ako nije zahtevana promena konteksta i ako nit nema pravo da se izvrsava beskonacno
-		if ((Nucleus::counter == 0 && running->tSlice!=0) || demand_context_change){
+		if ((Nucleus::counter <= 0 && running->tSlice!=0) || demand_context_change){
 			//ako je zahtevana promena konteksta ili je nit dosla do nule (njen brojac)
 			// cout<<"menjam kontekst"<<endl;
 				demand_context_change=0;
@@ -132,7 +132,7 @@ void interrupt Nucleus::Timer(...){
 	     // konteksta – tako se da se stara
 	     // rutina poziva samo kada je stvarno doslo do prekida
 	if(!demand_context_change) {asm int 60h;
-	/*tick();*/}
+	tick();}
 
 	demand_context_change = 0;
 };

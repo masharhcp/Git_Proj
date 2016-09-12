@@ -127,9 +127,11 @@ PriQueue::~PriQueue(){
 
 void PriQueue::Print(){
 	Node* curr=head;
+
+	cout<<endl<<"list"<<endl;
 	if (head!=0){
-	while (curr->Data){
-		cout<<curr->TimeToWait<<" ID:"<<curr->Data->ID<<endl;
+	while (curr->Data && curr!=0){
+		cout<<"MBT:"<<curr->Data->MaxBlockTime<<"TTW: "<<curr->TimeToWait<<" ID:"<<curr->Data->ID<<endl;
 		curr=curr->Next;
 	}
 	}

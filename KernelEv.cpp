@@ -29,6 +29,7 @@
     		if(maker!=Nucleus::idle)
     		Scheduler::put(maker);
     		maker=0;
+    		dispatch();
     	}
 
     }

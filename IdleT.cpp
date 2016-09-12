@@ -11,7 +11,7 @@ IdleT::IdleT():Thread(256 , 2){}
 
 void IdleT::run(){
 	k=1;
-	while (k==1){}
+	while (k==1){dispatch();}
 }
 
 void IdleT::start(){

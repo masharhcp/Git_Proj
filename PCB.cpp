@@ -28,6 +28,7 @@ PCB::~PCB(){
 }
 
 void PCB::InitStack(){
+	Lock();
 	stack=new unsigned[sSize];
 	#ifndef BCC_BLOCK_IGNORE
 	//stack[sSize-1]=FP_SEG(myThread);
@@ -40,7 +41,7 @@ void PCB::InitStack(){
 	bp = FP_OFF(stack+sSize-14);
 	ss = FP_SEG(stack+sSize-14);
 	#endif
-
+	Unlock();
 
 }
 
