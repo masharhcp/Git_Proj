@@ -72,6 +72,13 @@ void Nucleus::Stop_System(){
 PCB* curr=0;
 void interrupt Nucleus::Timer(...){
 
+
+	// poziv stare prekidne rutine koja se
+		     // nalazila na 08h, a sad je na 60h
+		     // poziva se samo kada nije zahtevana promena
+		     // konteksta – tako se da se stara
+		     // rutina poziva samo kada je stvarno doslo do prekida
+
 	if (!demand_context_change && counter>0) {--counter; }
 	if (!demand_context_change){
 		++clock;
@@ -89,6 +96,8 @@ void interrupt Nucleus::Timer(...){
 		Scheduler::put(curr);
 		}
 	}
+	asm int 60h;
+	tick();
 }
 
 	//ako nije zahtevana promena konteksta i ako nit nema pravo da se izvrsava beskonacno
@@ -126,15 +135,9 @@ void interrupt Nucleus::Timer(...){
 
 
 	}
-		// poziv stare prekidne rutine koja se
-	     // nalazila na 08h, a sad je na 60h
-	     // poziva se samo kada nije zahtevana promena
-	     // konteksta – tako se da se stara
-	     // rutina poziva samo kada je stvarno doslo do prekida
-	if(!demand_context_change) {asm int 60h;
-	tick();}
 
-	demand_context_change = 0;
+
+		demand_context_change = 0;
 };
 
 

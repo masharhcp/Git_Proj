@@ -1,6 +1,7 @@
 #ifndef _EVENT_H_
 #define _EVENT_H_
 #include "IVTEntry.h"
+#include "Nucleus.h"
 
 typedef unsigned char IVTNo;
 class KernelEv;
@@ -26,6 +27,12 @@ void interrupt inter##numEntry(...){\
 newEntry##numEntry.signal();\
 if (callOld == 1)\
 newEntry##numEntry.callOldR();\
-dispatch();\
 }
 #endif
+
+
+//newEntry##numEntry.callOldR();\
+//newEntry##numEntry.signal();\
+//Nucleus::IVTTable[numEntry]->oldR();\
+//dispatch();\
+//Nucleus::IVTTable[numEntry]->myKernelEv->signal();\

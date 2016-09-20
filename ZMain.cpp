@@ -8,7 +8,6 @@
 #include "Nucleus.h"
 class PriQueue;
 class PCB;
-class BrzaNit;
 class PCBList;
 class UserMain;
 

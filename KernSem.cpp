@@ -21,7 +21,7 @@ int KernelSem::wait(Time maxTimeToWait){//povratna vrednost; vidi kad koja i vra
 		block(maxTimeToWait);
 
 	retValue=Nucleus::running->waitVal;
-	Nucleus::running->waitVal=1;
+	//Nucleus::running->waitVal=1;
 	return retValue;
 }
 

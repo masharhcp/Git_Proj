@@ -22,6 +22,7 @@ private:
     int value;
 	IVTNo ivtNo;
 	PCB* maker;
+	PCB* blocked;
 };
 
 

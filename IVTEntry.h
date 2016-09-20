@@ -21,10 +21,11 @@ public:
 	~IVTEntry();
 	void callOldR();
 	void signal();
+	pInterrupt oldR;
 
 private:
 
-pInterrupt oldR;
+
 int ivtNo;
 };
 

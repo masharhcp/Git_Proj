@@ -14,36 +14,45 @@
 		ivtNo=ivtN;
 		maker=(PCB*)Nucleus::running;
 		Nucleus::IVTTable[ivtNo]->myKernelEv=this;
+		value=0;
+		blocked=0;
 		Unlock();
 	}
 
 	KernelEv::~KernelEv(){
+		Lock();
 		Nucleus::IVTTable[ivtNo]->myKernelEv=0;
+		maker=0;
+		blocked=0;
+		Unlock();
 
 	}
 
+
     void KernelEv::signal(){
-    	if(maker==0)value=1;
-    	else{
+    	Lock();
+    	if(maker->state==PCB::BLOCKED&&value==0){
     		maker->state=PCB::READY;
-    		if(maker!=Nucleus::idle)
     		Scheduler::put(maker);
-    		maker=0;
-    		dispatch();
     	}
+    	value=1;
+    	Unlock();
 
     }
 
-    void KernelEv::wait(){
+   void KernelEv::wait(){
+    	Lock();
     	if (Nucleus::running==maker){
-    		if(value==0){
+    		if (value==0){
     			Nucleus::running->state=PCB::BLOCKED;
     			dispatch();
-    		}
-    		else
-    			if (value==1)value=0;
-
     	}
+    	if (value==1)value=0;
+
 
     }
+    	Unlock();
+   }
+
+
 
